@@ -105,7 +105,6 @@
     place-items: center;
   }
 
-  textarea:focus,
   input:focus {
     outline: none;
     background: #ffffff;
