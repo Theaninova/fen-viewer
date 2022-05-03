@@ -1,0 +1,26 @@
+.DS_Store
+node_modules
+/build
+/.svelte-kit
+/package
+.env
+.env.*
+!.env.example
+.idea
+
+# special files
+## blogs
+
+/static/page/**/*.md
+/static/page/**/*.csv
+/static/page/**/*.json
+/static/fonts/*.ttf
+/static/*.csv
+images.scss
+*.base64.txt
+*.jpg
+*.svg
+*.png
+*.webp
+*.afphoto
+*.afdesign
