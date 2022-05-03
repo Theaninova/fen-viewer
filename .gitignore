@@ -24,3 +24,5 @@ images.scss
 *.webp
 *.afphoto
 *.afdesign
+
+!/readme-resources/**/*

@@ -9,6 +9,11 @@ const config = {
 
   kit: {
     adapter: adapter(),
+    inlineStyleThreshold: 16_384,
+    trailingSlash: "always",
+    prerender: {
+      default: true,
+    },
   },
 }
 
