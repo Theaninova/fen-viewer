@@ -18,7 +18,7 @@
     "sass": "^1.49.11"
   },
   "devDependencies": {
-    "@sveltejs/kit": "next",
+    "@sveltejs/kit": "1.0.0-next.310",
     "@sveltejs/adapter-static": "next",
     "@typescript-eslint/eslint-plugin": "^5.10.1",
     "@typescript-eslint/parser": "^5.10.1",
