@@ -14,6 +14,8 @@ const config = {
     paths: {
       base: process.env.BASE_HREF || "",
     },
+    // For GitHub Pages
+    appDir: "internal",
     prerender: {
       default: true,
     },
