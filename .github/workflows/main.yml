@@ -47,6 +47,7 @@ jobs:
         id: download-build
         with:
           name: build
+          path: build
       - run: ls -R
       - name: GitHub Pages
         # You may pin to the exact commit or the version.
