@@ -44,6 +44,7 @@ jobs:
     needs: build
     steps:
       - uses: actions/download-artifact@v2
+        id: download-build
         with:
           name: build
       - name: GitHub Pages
@@ -54,6 +55,6 @@ jobs:
           # Git branch where assets will be deployed
           target_branch: gh_pages
           # Build directory to deploy
-          build_dir: ./build
+          build_dir: ${{ steps.download-build.outputs.download-path }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
