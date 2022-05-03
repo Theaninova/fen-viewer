@@ -57,6 +57,6 @@ jobs:
           # Git branch where assets will be deployed
           target_branch: gh_pages
           # Build directory to deploy
-          build_dir: ${{ steps.download-build.outputs.download-path }}
+          build_dir: ./build
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
