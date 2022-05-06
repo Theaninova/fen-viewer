@@ -55,6 +55,9 @@ export class ServerConnection {
       task().then(resolve)
     })
     this.lock = out
+    this.lock.then(() => {
+      this.lock = undefined
+    })
 
     return out
   }

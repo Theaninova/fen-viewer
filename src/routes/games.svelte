@@ -8,10 +8,12 @@
 
   let response: GameResponse[] = []
 
+  let connection: ServerConnection
+
   $: games = parseGames(response)
 
-  onMount(async () => {
-    const connection = new ServerConnection("wss://chess.df1ash.de/websockets/game")
+  onMount(() => {
+    connection = new ServerConnection("wss://chess.df1ash.de/websockets/game")
 
     connection.updateState(500, state => {
       response = state
