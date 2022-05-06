@@ -1,19 +1,27 @@
 import type {ParsedFen} from "./fen"
 import {parseFenString} from "./fen"
 
-export interface Game {
+export interface GameResponse {
+  name: string
+  players: string[]
   id: number
-  fen: string
+  state: {state: {fen: string}}
 }
 
 export interface ParsedGame {
   id: number
+  name: string
+  players: string[]
   state: ParsedFen
 }
 
-export function parseGames(games: Game[]): ParsedGame[] {
-  return games.map(game => ({
-    id: game.id,
-    state: parseFenString(game.fen),
-  }))
+export function parseGames(games: GameResponse[]): ParsedGame[] {
+  return games
+    .sort((a, b) => b.id - a.id)
+    .map(game => ({
+      id: game.id,
+      name: game.name,
+      players: game.players,
+      state: parseFenString(game.state.state.fen),
+    }))
 }

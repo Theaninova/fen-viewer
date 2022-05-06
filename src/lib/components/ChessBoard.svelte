@@ -1,62 +1,78 @@
 <script lang="ts">
   import type {ParsedFen} from "../fen"
   import {isWhitePieceRegex} from "../fen"
-  import FixedFont from "./FixedFont.svelte"
 
   export let chessState: ParsedFen
-
-  const headerRows = ["", ...Array.from({length: 8}).map((_, i) => String.fromCodePoint(i + 65)), ""]
 </script>
 
 <!-- TODO: make the whole board an svg graphic -->
 
 {#if chessState}
-  <table {...$$props}>
-    <tr>
-      {#each headerRows as piece}
-        <th><FixedFont fontSize="4px">{piece}</FixedFont></th>
+  <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 100 100">
+    <defs>
+      <pattern id="checkerboard" width="20" height="20" patternUnits="userSpaceOnUse">
+        <rect width="10" height="10" fill="#d7acac" />
+        <rect width="10" height="10" fill="#d7acac" y="10" x="10" />
+      </pattern>
+    </defs>
+
+    <rect x="10" y="10" width="80" height="80" fill="#be8b89" />
+    <rect x="10" y="10" width="80" height="80" fill="url(#checkerboard)" />
+
+    {#each [5, 95] as x}
+      {#each Array.from({length: 8}).map((_, i) => i) as y}
+        <text
+          {x}
+          y={y * 10 + 15}
+          font-size="5px"
+          fill="currentColor"
+          text-anchor="middle"
+          alignment-baseline="central"
+        >
+          {8 - y}
+        </text>
+
+        <text
+          y={x}
+          x={y * 10 + 15}
+          font-size="5px"
+          fill="currentColor"
+          text-anchor="middle"
+          alignment-baseline="central"
+        >
+          {String.fromCodePoint(y + 65)}
+        </text>
       {/each}
-    </tr>
-    {#each chessState.board as row, i}
-      <tr>
-        <th><FixedFont fontSize="4px">{i}</FixedFont></th>
-        {#each row as piece}
-          <td class:white={isWhitePieceRegex.test(piece)}>
-            <FixedFont fontSize="7px">{piece ? piece : ""}</FixedFont>
-          </td>
-        {/each}
-        <th><FixedFont fontSize="4px">{i}</FixedFont></th>
-      </tr>
     {/each}
-    <tr>
-      {#each headerRows as piece}
-        <th><FixedFont fontSize="4px">{piece}</FixedFont></th>
+
+    {#each chessState.board as row, x}
+      {#each row as piece, y}
+        {#if piece}
+          <text
+            y={x * 10 + 15}
+            x={y * 10 + 15}
+            font-size="7px"
+            class:white={isWhitePieceRegex.test(piece)}
+            class:black={!isWhitePieceRegex.test(piece)}
+            fill="currentColor"
+            text-anchor="middle"
+            alignment-baseline="central"
+          >
+            {piece}
+          </text>
+        {/if}
       {/each}
-    </tr>
-  </table>
+    {/each}
+  </svg>
 {/if}
 
 <style lang="scss">
-  table {
-    border-collapse: collapse;
+  svg {
+    height: 100%;
+    width: 100%;
   }
 
-  table,
-  tr,
-  td,
-  th {
-    padding: 0;
-    margin: 0;
-  }
-
-  td,
-  th {
-    width: calc(100% / (8 + 2));
-    height: calc(100% / (8 + 2));
-  }
-
-  td {
-    background: #d7acac;
+  .black {
     color: #000;
     text-shadow: #757575 0 0 10px;
   }
@@ -64,17 +80,5 @@
   .white {
     color: #fff;
     text-shadow: black 0 0 10px;
-  }
-
-  tr:nth-child(even) {
-    td:nth-child(odd) {
-      background: #be8b89;
-    }
-  }
-
-  tr:nth-child(odd) {
-    td:nth-child(even) {
-      background: #be8b89;
-    }
   }
 </style>

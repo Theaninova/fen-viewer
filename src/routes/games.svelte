@@ -2,13 +2,24 @@
   import "../lib/style/style.scss"
   import ChessBoard from "../lib/components/ChessBoard.svelte"
   import {parseGames} from "../lib/game"
+  import type {GameResponse} from "../lib/game"
+  import {onMount} from "svelte"
 
-  let games = parseGames(
-    Array.from({length: 10}).map((_, i) => ({
-      id: i,
-      fen: "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
-    })),
-  )
+  let response: GameResponse[] = []
+
+  $: games = parseGames(response)
+
+  onMount(() => {
+    let ws = new WebSocket("wss://chess.df1ash.de/websockets/game")
+    ws.addEventListener("open", () => {
+      setInterval(function () {
+        ws.send(JSON.stringify({type: 1}))
+      }, 500)
+    })
+    ws.addEventListener("message", event => {
+      response = JSON.parse(event.data)
+    })
+  })
 </script>
 
 <main>
@@ -17,7 +28,8 @@
   <div class="game-container">
     {#each games as game}
       <div class="game">
-        <h2>Game {game.id}</h2>
+        <h2>{game.name} {game.id}</h2>
+        <p>{game.players.join(" vs ")}</p>
         <ChessBoard chessState={game.state} />
       </div>
     {/each}
@@ -35,6 +47,7 @@
   }
 
   .game-container {
+    width: 100%;
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   }
@@ -43,5 +56,10 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+    max-height: 85vh;
+  }
+
+  .game > p {
+    height: 19px;
   }
 </style>
