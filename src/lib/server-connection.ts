@@ -64,6 +64,9 @@ export class ServerConnection {
       const result = await this.response
 
       try {
+        if (query.type !== GameType.GetState) {
+          console.log(JSON.parse(result as string))
+        }
         return JSON.parse(result as string)
       } catch {
         console.error(result)

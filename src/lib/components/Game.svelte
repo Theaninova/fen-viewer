@@ -10,11 +10,11 @@
 
 <div class="game">
   <h2>{game.name} {game.id}</h2>
-  <p class="vs-note">
+  <div class="vs-note">
     <Player index={0} {game} {serverConnection} />
     <em>vs</em>
     <Player index={1} {game} {serverConnection} />
-  </p>
+  </div>
   <ChessBoard chessState={game.state} />
 </div>
 
@@ -31,7 +31,7 @@
     justify-items: center;
 
     width: calc(100% - 16px);
-    height: 19px;
+    height: 48px;
     min-width: 0;
     min-height: 0;
   }

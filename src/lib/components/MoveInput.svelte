@@ -14,10 +14,10 @@
     type="text"
     name="name"
     placeholder="a1 a2"
-    pattern="[a-h][1-8] [a-h][1-8]"
+    pattern="[a-h][1-8][a-h][1-8]"
     autocomplete="off"
-    minlength="5"
-    maxlength="5"
+    minlength="4"
+    maxlength="4"
     required
   />
   <input {disabled} type="submit" value="Move" />
