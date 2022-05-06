@@ -3,6 +3,7 @@
   import ChessBoard from "./ChessBoard.svelte"
   import {ServerConnection} from "../server-connection"
   import Player from "./Player.svelte"
+  import GameMiscInfo from "./GameMiscInfo.svelte"
 
   export let game: ParsedGame
   export let serverConnection: ServerConnection
@@ -10,7 +11,7 @@
 
 <div class="game">
   <h2>{game.name} {game.id}</h2>
-  <p />
+  <GameMiscInfo {game} />
   <div class="vs-note">
     <Player index={0} {game} {serverConnection} />
     <em>vs</em>
