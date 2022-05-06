@@ -4,21 +4,16 @@
   import {parseGames} from "../lib/game"
   import type {GameResponse} from "../lib/game"
   import {onMount} from "svelte"
+  import {ServerConnection} from "../lib/server-connection"
 
   let response: GameResponse[] = []
 
   $: games = parseGames(response)
 
-  onMount(() => {
-    let ws = new WebSocket("wss://chess.df1ash.de/websockets/game")
-    ws.addEventListener("open", () => {
-      setInterval(function () {
-        ws.send(JSON.stringify({type: 1}))
-      }, 500)
-    })
-    ws.addEventListener("message", event => {
-      response = JSON.parse(event.data)
-    })
+  onMount(async () => {
+    const connection = new ServerConnection("wss://chess.df1ash.de/websockets/game")
+
+    response = await connection.getState()
   })
 </script>
 
