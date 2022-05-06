@@ -8,12 +8,12 @@ export interface Game {
 
 export interface ParsedGame {
   id: number
-  fen: ParsedFen
+  state: ParsedFen
 }
 
 export function parseGames(games: Game[]): ParsedGame[] {
   return games.map(game => ({
     id: game.id,
-    fen: parseFenString(game.fen),
+    state: parseFenString(game.fen),
   }))
 }

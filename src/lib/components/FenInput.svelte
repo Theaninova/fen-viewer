@@ -1,6 +1,6 @@
 <script lang="ts">
   import {isFen, parseFenString, fenValidPattern} from "../fen"
-  import {createEventDispatcher} from "svelte"
+  import {createEventDispatcher, onMount} from "svelte"
   import type {ParsedFen} from "../fen"
 
   export let fen = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"
@@ -12,6 +12,10 @@
   } else {
     console.log("Invalid FEN string")
   }
+
+  onMount(() => {
+    dispatch("change", parseFenString(fen))
+  })
 
   let input: HTMLInputElement
 </script>

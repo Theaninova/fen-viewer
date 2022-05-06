@@ -8,6 +8,8 @@
   const headerRows = ["", ...Array.from({length: 8}).map((_, i) => String.fromCodePoint(i + 65)), ""]
 </script>
 
+<!-- TODO: make the whole board an svg graphic -->
+
 {#if chessState}
   <table {...$$props}>
     <tr>
