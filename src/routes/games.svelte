@@ -2,7 +2,6 @@
   import "../lib/style/style.scss"
   import ChessBoard from "../lib/components/ChessBoard.svelte"
   import {parseGames} from "../lib/game"
-  import FixedFont from "../lib/components/FixedFont.svelte"
 
   let games = parseGames(
     Array.from({length: 10}).map((_, i) => ({
@@ -18,7 +17,7 @@
   <div class="game-container">
     {#each games as game}
       <div class="game">
-        <FixedFont fontSize="10px" style="width: 10%">{game.id}</FixedFont>
+        <h2>Game {game.id}</h2>
         <ChessBoard chessState={game.state} />
       </div>
     {/each}
