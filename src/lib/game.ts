@@ -4,6 +4,7 @@ import {parseFenString} from "./fen"
 export enum GameType {
   Login = 0,
   GetState = 1,
+  CreateGame = 2,
   Join = 3,
   Move = 4,
 }
@@ -24,11 +25,19 @@ export interface ParsedGame {
 
 export interface PlayerInfo {
   playerName: string
-  playerId: number
+  playerID: number
 }
 
 export interface GameRequest<T extends GameType> {
   type: T
+}
+
+export interface CreateGameRequest extends GameRequest<GameType.CreateGame> {
+  username: "creator"
+  // Why this is required?
+  // "Ask Alexander Schmitz. The creator"
+  playerID: number
+  gameName: "KingOfTheHill"
 }
 
 export interface JoinGameRequest extends GameRequest<GameType.Join> {
@@ -61,4 +70,8 @@ export function parseGames(games: GameResponse[]): ParsedGame[] {
       players: game.players,
       state: parseFenString(game.state.state.fen),
     }))
+}
+
+export function randomString(length: number): string {
+  return Array.from({length}, () => Math.random().toString(36)[2]).join("")
 }

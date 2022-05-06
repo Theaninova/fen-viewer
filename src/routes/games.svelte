@@ -1,21 +1,34 @@
 <script lang="ts">
   import "../lib/style/style.scss"
-  import ChessBoard from "../lib/components/ChessBoard.svelte"
   import {parseGames} from "../lib/game"
   import type {GameResponse} from "../lib/game"
   import {onMount} from "svelte"
   import {ServerConnection} from "../lib/server-connection"
+  import Game from "../lib/components/Game.svelte"
+  import CreateGameInput from "../lib/components/CreateGameInput.svelte"
+  import {page} from "$app/stores"
+  import {goto} from "$app/navigation"
 
   let response: GameResponse[] = []
 
-  let connection: ServerConnection
+  let serverConnection: ServerConnection
 
   $: games = parseGames(response)
 
   onMount(() => {
-    connection = new ServerConnection("wss://chess.df1ash.de/websockets/game")
+    serverConnection = new ServerConnection("wss://chess.df1ash.de/websockets/game", {
+      playerName: $page.url.searchParams.get("playerName"),
+      playerID: Number($page.url.searchParams.get("playerID")),
+    })
 
-    connection.updateState(500, state => {
+    serverConnection.session.then(session => {
+      console.log("session:", session)
+      $page.url.searchParams.set("playerName", session.playerName)
+      $page.url.searchParams.set("playerID", session.playerID.toString())
+      goto(`?${$page.url.searchParams.toString()}`)
+    })
+
+    serverConnection.updateState(500, state => {
       response = state
     })
   })
@@ -26,12 +39,9 @@
 
   <div class="game-container">
     {#each games as game}
-      <div class="game">
-        <h2>{game.name} {game.id}</h2>
-        <p>{game.players.join(" vs ")}</p>
-        <ChessBoard chessState={game.state} />
-      </div>
+      <Game {game} {serverConnection} />
     {/each}
+    <CreateGameInput {serverConnection} />
   </div>
 </main>
 
@@ -39,7 +49,6 @@
   main {
     font-family: Roboto, sans-serif;
 
-    // center
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -49,16 +58,5 @@
     width: 100%;
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  }
-
-  .game {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    max-height: 85vh;
-  }
-
-  .game > p {
-    height: 19px;
   }
 </style>

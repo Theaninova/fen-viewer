@@ -1,5 +1,5 @@
-import type {GameResponse, JoinGameRequest, MakeMoveRequest, PlayerInfo} from "./game"
-import {GameType} from "./game"
+import type {GameResponse, JoinGameRequest, LoginRequest, MakeMoveRequest, PlayerInfo} from "./game"
+import {GameType, randomString} from "./game"
 
 async function delay(ms: number): Promise<void> {
   return new Promise(resolve => setTimeout(resolve, ms))
@@ -14,9 +14,13 @@ export class ServerConnection {
 
   private readonly isUp: Promise<void>
 
+  private playerName!: string
+
+  readonly session: Promise<PlayerInfo>
+
   private resolveResponse!: (value: unknown) => void
 
-  constructor(readonly url = "wss://chess.df1ash.de/websockets/game") {
+  constructor(readonly url = "wss://chess.df1ash.de/websockets/game", session: Partial<PlayerInfo>) {
     this.websocket = new WebSocket(url)
     this.isUp = new Promise(resolve => {
       this.websocket.addEventListener("open", () => resolve())
@@ -27,10 +31,28 @@ export class ServerConnection {
     })
 
     this.websocket.addEventListener("message", event => {
-      this.resolveResponse(JSON.parse(event.data))
+      this.resolveResponse(event.data)
 
       this.response = new Promise(resolve => {
         this.resolveResponse = resolve
+      })
+    })
+
+    this.session =
+      !session.playerName || !session.playerID
+        ? this.getState().then(() => {
+            return this.register({
+              username: session.playerName ?? randomString(20),
+            })
+          })
+        : Promise.resolve(session as PlayerInfo)
+
+    this.session.then(session => {
+      this.playerName = session.playerName
+
+      void this.login({
+        username: session.playerName,
+        playerID: session.playerID,
       })
     })
   }
@@ -39,7 +61,14 @@ export class ServerConnection {
     return this.runTask(async () => {
       this.websocket.send(JSON.stringify(query))
 
-      return (await this.response) as T
+      const result = await this.response
+
+      try {
+        return JSON.parse(result as string)
+      } catch {
+        console.error(result)
+        return
+      }
     })
   }
 
@@ -62,17 +91,41 @@ export class ServerConnection {
     return out
   }
 
-  async join(info: Omit<JoinGameRequest, "type">): Promise<PlayerInfo> {
+  async join(info: Pick<JoinGameRequest, "gameID">): Promise<PlayerInfo> {
     return this.request<PlayerInfo>({
       type: GameType.Join,
+      username: (await this.session).playerName,
+      playerID: (await this.session).playerID,
+      joinAsPlayer: 1,
       ...info,
     })
   }
 
-  async login(info: Omit<JoinGameRequest, "type">): Promise<PlayerInfo> {
+  isSelf(userName: string): boolean {
+    return this.playerName === userName
+  }
+
+  private async register(info: Omit<LoginRequest, "type" | "playerID">): Promise<PlayerInfo> {
+    return this.request<PlayerInfo>({
+      ...info,
+      type: GameType.Login,
+      username: info.username,
+    })
+  }
+
+  private async login(info: Omit<LoginRequest, "type">): Promise<PlayerInfo> {
     return this.request<PlayerInfo>({
       type: GameType.Login,
       ...info,
+    })
+  }
+
+  async createGame(): Promise<PlayerInfo> {
+    return this.request<PlayerInfo>({
+      type: GameType.CreateGame,
+      gameName: "KingOfTheHill",
+      username: (await this.session).playerName,
+      playerID: (await this.session).playerID,
     })
   }
 
@@ -92,9 +145,11 @@ export class ServerConnection {
     })()
   }
 
-  async makeMove(info: Omit<MakeMoveRequest, "type">): Promise<PlayerInfo> {
+  async makeMove(info: Pick<MakeMoveRequest, "gameID" | "move">): Promise<PlayerInfo> {
     return this.request<PlayerInfo>({
       type: GameType.Move,
+      username: (await this.session).playerName,
+      playerID: (await this.session).playerID,
       ...info,
     })
   }
