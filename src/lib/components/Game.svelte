@@ -10,6 +10,7 @@
 
 <div class="game">
   <h2>{game.name} {game.id}</h2>
+  <p />
   <div class="vs-note">
     <Player index={0} {game} {serverConnection} />
     <em>vs</em>

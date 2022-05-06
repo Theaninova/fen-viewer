@@ -13,11 +13,11 @@
     bind:this={move}
     type="text"
     name="name"
-    placeholder="a1 a2"
-    pattern="[a-h][1-8][a-h][1-8]"
+    placeholder="a1a2q"
+    pattern="[a-h][1-8][a-h][1-8][NnBbQqRr]?"
     autocomplete="off"
     minlength="4"
-    maxlength="4"
+    maxlength="5"
     required
   />
   <input {disabled} type="submit" value="Move" />
@@ -29,7 +29,7 @@
   }
 
   input[type="text"] {
-    width: 48px;
+    width: 56px;
     height: 32px;
 
     box-sizing: border-box;
