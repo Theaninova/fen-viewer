@@ -1,6 +1,10 @@
 import type {GameResponse, JoinGameRequest, MakeMoveRequest, PlayerInfo} from "./game"
 import {GameType} from "./game"
 
+async function delay(ms: number): Promise<void> {
+  return new Promise(resolve => setTimeout(resolve, ms))
+}
+
 export class ServerConnection {
   private readonly websocket: WebSocket
 
@@ -15,11 +19,7 @@ export class ServerConnection {
   constructor(readonly url = "wss://chess.df1ash.de/websockets/game") {
     this.websocket = new WebSocket(url)
     this.isUp = new Promise(resolve => {
-      this.websocket.addEventListener("open", () => {
-        setInterval(() => {
-          resolve()
-        }, 500)
-      })
+      this.websocket.addEventListener("open", () => resolve())
     })
 
     this.response = new Promise(resolve => {
@@ -77,6 +77,16 @@ export class ServerConnection {
     return this.request<GameResponse[]>({
       type: GameType.GetState,
     })
+  }
+
+  updateState(delayMs: number, onUpdate: (state: GameResponse[]) => boolean | void) {
+    void (async () => {
+      let continueLoop = true
+      while (continueLoop) {
+        continueLoop = onUpdate(await this.getState()) ?? true
+        await delay(delayMs)
+      }
+    })()
   }
 
   async makeMove(info: Omit<MakeMoveRequest, "type">): Promise<PlayerInfo> {

@@ -13,7 +13,9 @@
   onMount(async () => {
     const connection = new ServerConnection("wss://chess.df1ash.de/websockets/game")
 
-    response = await connection.getState()
+    connection.updateState(500, state => {
+      response = state
+    })
   })
 </script>
 
