@@ -15,6 +15,11 @@ export interface ParsedGame {
   state: ParsedFen
 }
 
+export interface PlayerInfo {
+  playerName: string
+  playerId: number
+}
+
 export function parseGames(games: GameResponse[]): ParsedGame[] {
   return games
     .sort((a, b) => b.id - a.id)
