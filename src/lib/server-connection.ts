@@ -1,4 +1,5 @@
-import type {GameResponse, PlayerInfo} from "./game"
+import type {GameResponse, JoinGameRequest, MakeMoveRequest, PlayerInfo} from "./game"
+import {GameType} from "./game"
 
 export class ServerConnection {
   private readonly websocket: WebSocket
@@ -7,34 +8,38 @@ export class ServerConnection {
 
   private response: Promise<unknown>
 
+  private readonly isUp: Promise<void>
+
   private resolveResponse!: (value: unknown) => void
 
-  constructor(
-    readonly url = "wss://chess.df1ash.de/websockets/game",
-    public onUpdate?: (data: GameResponse[]) => void,
-  ) {
+  constructor(readonly url = "wss://chess.df1ash.de/websockets/game") {
     this.websocket = new WebSocket(url)
-    this.websocket.addEventListener("open", () => {
-      setInterval(() => {
-        this.websocket.send(JSON.stringify({type: 1}))
-      }, 500)
+    this.isUp = new Promise(resolve => {
+      this.websocket.addEventListener("open", () => {
+        setInterval(() => {
+          resolve()
+        }, 500)
+      })
     })
 
     this.response = new Promise(resolve => {
       this.resolveResponse = resolve
     })
+
     this.websocket.addEventListener("message", event => {
-      const parsed = JSON.parse(event.data)
+      this.resolveResponse(JSON.parse(event.data))
 
-      if (Array.isArray(parsed) && this.onUpdate) {
-        this.onUpdate(parsed)
-      } else if (!Array.isArray(parsed)) {
-        this.resolveResponse(parsed)
+      this.response = new Promise(resolve => {
+        this.resolveResponse = resolve
+      })
+    })
+  }
 
-        this.response = new Promise(resolve => {
-          this.resolveResponse = resolve
-        })
-      }
+  private async request<T>(query: {type: GameType; [key: string]: unknown}): Promise<T> {
+    return this.runTask(async () => {
+      this.websocket.send(JSON.stringify(query))
+
+      return (await this.response) as T
     })
   }
 
@@ -43,6 +48,7 @@ export class ServerConnection {
    * because the server is really wonky.
    */
   private async runTask<T>(task: () => Promise<T>): Promise<T> {
+    await this.isUp
     while (this.lock) await this.lock
 
     const out = new Promise<T>(resolve => {
@@ -53,19 +59,30 @@ export class ServerConnection {
     return out
   }
 
-  async makeMove(userName: string, playerId: number, gameId: number, move: string): Promise<PlayerInfo> {
-    return this.runTask(async () => {
-      this.websocket.send(
-        JSON.stringify({
-          type: 4,
-          username: userName,
-          playerid: playerId,
-          gameid: gameId,
-          move: move,
-        }),
-      )
+  async join(info: Omit<JoinGameRequest, "type">): Promise<PlayerInfo> {
+    return this.request<PlayerInfo>({
+      type: GameType.Join,
+      ...info,
+    })
+  }
 
-      return (await this.response) as PlayerInfo
+  async login(info: Omit<JoinGameRequest, "type">): Promise<PlayerInfo> {
+    return this.request<PlayerInfo>({
+      type: GameType.Login,
+      ...info,
+    })
+  }
+
+  async getState(): Promise<GameResponse[]> {
+    return this.request<GameResponse[]>({
+      type: GameType.GetState,
+    })
+  }
+
+  async makeMove(info: Omit<MakeMoveRequest, "type">): Promise<PlayerInfo> {
+    return this.request<PlayerInfo>({
+      type: GameType.Move,
+      ...info,
     })
   }
 }
