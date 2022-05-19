@@ -10,7 +10,7 @@
 </script>
 
 <div class="game">
-  <h2>{game.name} {game.id}</h2>
+  <h2>{game.ID}</h2>
   <GameMiscInfo {game} />
   <div class="vs-note">
     <Player index={0} {game} {serverConnection} />

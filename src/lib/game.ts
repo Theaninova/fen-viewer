@@ -10,16 +10,16 @@ export enum GameType {
 }
 
 export interface GameResponse {
-  name: string
-  players: string[]
-  id: number
-  state: {state: {fen: string}}
+  activePlayerList: string[]
+  ID: number
+  moveHistory: string[]
+  currentPlayer: PlayerInfo
+  fen: string
+  over: boolean
+  draw: boolean
 }
 
-export interface ParsedGame {
-  id: number
-  name: string
-  players: string[]
+export interface ParsedGame extends GameResponse {
   state: ParsedFen
 }
 
@@ -63,12 +63,10 @@ export type GetStateRequest = GameRequest<GameType.GetState>
 
 export function parseGames(games: GameResponse[]): ParsedGame[] {
   return games
-    .sort((a, b) => b.id - a.id)
+    .sort((a, b) => b.ID - a.ID)
     .map(game => ({
-      id: game.id,
-      name: game.name,
-      players: game.players,
-      state: parseFenString(game.state.state.fen),
+      ...game,
+      state: parseFenString(game.fen),
     }))
 }
 

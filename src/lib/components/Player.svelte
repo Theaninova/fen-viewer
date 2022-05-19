@@ -8,23 +8,23 @@
   export let game: ParsedGame
   export let serverConnection: ServerConnection
 
-  $: player = game.players[index]
-  $: firstPlayer = game.players[0]
-  $: otherPlayer = game.players[Number(!index)]
+  $: player = game.activePlayerList[index]
+  $: firstPlayer = game.activePlayerList[0]
+  $: otherPlayer = game.activePlayerList[Number(!index)]
 
   let joined: Promise<boolean> = Promise.resolve(false)
 
   function join() {
     joined = serverConnection
       .join({
-        gameID: game.id,
+        gameID: game.ID,
       })
       .then(() => true)
   }
 
   function move(move: CustomEvent<string>) {
     serverConnection.makeMove({
-      gameID: game.id,
+      gameID: game.ID,
       move: move.detail,
     })
   }
@@ -35,10 +35,10 @@
     loading...
   {:then joined}
     {#if player}
-      {#if serverConnection.isSelf(player)}
+      {#if serverConnection.isSelf(player.playerName)}
         <MoveInput on:move={move} />
       {:else}
-        {player}
+        {player.playerName}
       {/if}
     {:else}
       <JoinGameInput on:join={join} disabled={index === 1 && !firstPlayer} />
