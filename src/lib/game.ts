@@ -7,6 +7,20 @@ export enum GameType {
   CreateGame = 2,
   Join = 3,
   Move = 4,
+  TournamentState = 5,
+  JoinTournament = 6,
+  OpenTournament = 7,
+  CloseTournament = 8,
+}
+
+export type TournamentTree = Array<GameResponse | undefined | TournamentTree>
+
+export interface TournamentStateResponse {
+  players: Array<{
+    name: string
+    rating: number
+  }>
+  games: TournamentTree
 }
 
 export interface GameResponse {
