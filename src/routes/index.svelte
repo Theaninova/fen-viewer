@@ -19,14 +19,3 @@
 
   <ChessBoard style="width: min(100vw, 80vh); height: min(100vw, 80vh);" chessState={state} />
 </main>
-
-<style lang="scss">
-  main {
-    font-family: Roboto, sans-serif;
-
-    // center
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-</style>

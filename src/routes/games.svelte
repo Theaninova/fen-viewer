@@ -46,14 +46,6 @@
 </main>
 
 <style lang="scss">
-  main {
-    font-family: Roboto, sans-serif;
-
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-
   .game-container {
     width: 100%;
     display: grid;
