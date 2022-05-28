@@ -27,7 +27,7 @@
 <style lang="scss">
   div {
     display: grid;
-    grid-template-columns: repeat(4, auto);
+    grid-template-columns: repeat(5, auto);
     grid-gap: 1rem;
     align-items: center;
     justify-items: center;

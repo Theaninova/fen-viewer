@@ -1,3 +1,5 @@
+// noinspection NonAsciiCharacters
+
 export type BlackPiece = "♜" | "♞" | "♝" | "♛" | "♚" | "♟"
 export type WhitePiece = "♖" | "♘" | "♗" | "♕" | "♔" | "♙"
 export type BoardPiece = BlackPiece | WhitePiece | undefined

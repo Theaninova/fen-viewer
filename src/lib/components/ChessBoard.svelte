@@ -52,6 +52,7 @@
             y={x * 10 + 15}
             x={y * 10 + 15}
             font-size="7px"
+            draggable="true"
             class:white={isWhitePieceRegex.test(piece)}
             class:black={!isWhitePieceRegex.test(piece)}
             fill="currentColor"
@@ -70,6 +71,11 @@
   svg {
     height: 100%;
     width: 100%;
+  }
+
+  text[draggable] {
+    cursor: move;
+    user-select: none;
   }
 
   .black {

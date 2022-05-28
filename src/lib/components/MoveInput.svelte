@@ -16,7 +16,7 @@
     placeholder="a1a2q"
     pattern="[a-h][1-8][a-h][1-8][NnBbQqRr]?"
     autocomplete="off"
-    minlength="4"
+    minlength="2"
     maxlength="5"
     required
   />

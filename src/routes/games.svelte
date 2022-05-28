@@ -1,22 +1,22 @@
 <script lang="ts">
   import "../lib/style/style.scss"
   import {parseGames} from "../lib/game"
-  import type {GameResponse} from "../lib/game"
   import {onMount} from "svelte"
   import {ServerConnection} from "../lib/server-connection"
   import Game from "../lib/components/Game.svelte"
   import CreateGameInput from "../lib/components/CreateGameInput.svelte"
   import {page} from "$app/stores"
   import {goto} from "$app/navigation"
+  import type {GameInfo} from "../lib/api/response"
 
-  let response: GameResponse[] = []
+  let response: GameInfo[] = []
 
   let serverConnection: ServerConnection
 
   $: games = parseGames(response)
 
   onMount(() => {
-    serverConnection = new ServerConnection("wss://chess.df1ash.de/websockets/game", {
+    serverConnection = new ServerConnection("ws://localhost:8025", {
       playerName: $page.url.searchParams.get("playerName"),
       playerID: Number($page.url.searchParams.get("playerID")),
     })
@@ -29,7 +29,7 @@
     })
 
     serverConnection.updateState(500, state => {
-      response = state
+      response = state.games
     })
   })
 </script>
