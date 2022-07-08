@@ -14,7 +14,7 @@
   $: games = parseGames(response)
 
   onMount(() => {
-    serverConnection = new ServerConnection(process.env.SERVER_URL || "ws://localhost:8025")
+    serverConnection = new ServerConnection(import.meta.env.VITE_SERVER_URL)
 
     serverConnection.updateState(500, state => {
       response = state.games
