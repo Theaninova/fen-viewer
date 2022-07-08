@@ -5,7 +5,7 @@
     "dev": "vite dev",
     "dev:external": "vite dev --host 0.0.0.0",
     "build": "vite build",
-    "build:gh-pages": "cross-env BASE_HREF=/fen-viewer svelte-kit build",
+    "build:gh-pages": "cross-env BASE_HREF=/fen-viewer vite build",
     "preview": "vite preview",
     "optimize-images": "node optimize-images.js",
     "check": "svelte-check --tsconfig ./tsconfig.json",
