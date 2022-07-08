@@ -8,6 +8,7 @@
     "build:gh-pages": "cross-env BASE_HREF=/fen-viewer vite build",
     "preview": "vite preview",
     "optimize-images": "node optimize-images.js",
+    "test": "jest",
     "check": "svelte-check --tsconfig ./tsconfig.json",
     "check:watch": "svelte-check --tsconfig ./tsconfig.json --watch",
     "lint": "prettier --ignore-path .gitignore --check --plugin-search-dir=. . && eslint --ignore-path .gitignore .",
