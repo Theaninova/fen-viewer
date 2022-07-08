@@ -1,0 +1,103 @@
+{
+  ".svelte-kit/runtime/client/start.js": {
+    "file": "start-3d4324d0.js",
+    "src": ".svelte-kit/runtime/client/start.js",
+    "isEntry": true,
+    "imports": [
+      "_index-b452b8f2.js",
+      "_singletons-d1fb5791.js"
+    ],
+    "dynamicImports": [
+      ".svelte-kit/runtime/components/layout.svelte",
+      ".svelte-kit/runtime/components/error.svelte",
+      "src/routes/index.svelte",
+      "src/routes/participate.svelte",
+      "src/routes/spectate.svelte"
+    ]
+  },
+  ".svelte-kit/runtime/components/layout.svelte": {
+    "file": "layout.svelte-93b78849.js",
+    "src": ".svelte-kit/runtime/components/layout.svelte",
+    "isEntry": true,
+    "isDynamicEntry": true,
+    "imports": [
+      "_index-b452b8f2.js"
+    ]
+  },
+  ".svelte-kit/runtime/components/error.svelte": {
+    "file": "error.svelte-a577c307.js",
+    "src": ".svelte-kit/runtime/components/error.svelte",
+    "isEntry": true,
+    "isDynamicEntry": true,
+    "imports": [
+      "_index-b452b8f2.js"
+    ]
+  },
+  "src/routes/index.svelte": {
+    "file": "pages/index.svelte-be99f81a.js",
+    "src": "src/routes/index.svelte",
+    "isEntry": true,
+    "isDynamicEntry": true,
+    "imports": [
+      "_index-b452b8f2.js",
+      "_ChessBoard-57b76d56.js"
+    ],
+    "css": [
+      "assets/pages/index.svelte-cd4c42c8.css"
+    ]
+  },
+  "src/routes/participate.svelte": {
+    "file": "pages/participate.svelte-0f809eea.js",
+    "src": "src/routes/participate.svelte",
+    "isEntry": true,
+    "isDynamicEntry": true,
+    "imports": [
+      "_index-b452b8f2.js",
+      "_ChessBoard-57b76d56.js",
+      "_CreateGameInput-85b4594d.js",
+      "_singletons-d1fb5791.js"
+    ],
+    "css": [
+      "assets/pages/participate.svelte-9e9a5a26.css"
+    ]
+  },
+  "src/routes/spectate.svelte": {
+    "file": "pages/spectate.svelte-5d46146f.js",
+    "src": "src/routes/spectate.svelte",
+    "isEntry": true,
+    "isDynamicEntry": true,
+    "imports": [
+      "_index-b452b8f2.js",
+      "_ChessBoard-57b76d56.js",
+      "_CreateGameInput-85b4594d.js"
+    ],
+    "css": [
+      "assets/pages/participate.svelte-9e9a5a26.css"
+    ]
+  },
+  "_index-b452b8f2.js": {
+    "file": "chunks/index-b452b8f2.js"
+  },
+  "_singletons-d1fb5791.js": {
+    "file": "chunks/singletons-d1fb5791.js"
+  },
+  "_ChessBoard-57b76d56.js": {
+    "file": "chunks/ChessBoard-57b76d56.js",
+    "imports": [
+      "_index-b452b8f2.js"
+    ],
+    "css": [
+      "assets/ChessBoard-bb2273bc.css"
+    ]
+  },
+  "_CreateGameInput-85b4594d.js": {
+    "file": "chunks/CreateGameInput-85b4594d.js",
+    "imports": [
+      "_ChessBoard-57b76d56.js",
+      "_index-b452b8f2.js"
+    ],
+    "css": [
+      "assets/CreateGameInput-5aa964fb.css"
+    ]
+  }
+}

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta http-equiv="content-security-policy" content="">
+	<style>@charset "UTF-8";.inputContainer.svelte-163oj43.svelte-163oj43{width:min(80vw,64vh);display:flex;flex-direction:row;align-items:center;justify-content:center}input.svelte-163oj43.svelte-163oj43{width:100%;height:40px;box-sizing:border-box;background:#e0bebd;color:#000;padding:8px;border-radius:6px 0 0 6px;border:none;transition:all .2s ease-in-out;text-decoration:none}.inputContainer.svelte-163oj43>div.svelte-163oj43{height:40px;width:40px;border-radius:0 6px 6px 0;background:#4b221f;color:#fff}.inputContainer.svelte-163oj43>div.svelte-163oj43:after{width:100%;height:100%;display:grid;place-items:center}input.svelte-163oj43.svelte-163oj43:focus{outline:none;background:#ffffff}input.svelte-163oj43:invalid+.svelte-163oj43:after{content:"\2716"}input.svelte-163oj43+.svelte-163oj43:after{content:"\2714"}
+
+@import"https://fonts.googleapis.com/css2?family=Noto+Sans+Symbols+2&family=Noto+Sans:wght@400;700&display=swap";html{background:#211010}html,body{margin:0}body{font-family:Noto Sans,"Noto Sans Symbols 2",sans-serif;box-sizing:border-box;color:#f1caca}main{display:flex;flex-direction:column;align-items:center}svg.svelte-uybd7z{height:100%;width:100%}text[draggable].svelte-uybd7z{cursor:move;user-select:none}.black.svelte-uybd7z{color:#000;text-shadow:#757575 0 0 10px}.white.svelte-uybd7z{color:#fff;text-shadow:black 0 0 10px}
+</style>
+	<link rel="stylesheet" href="/fen-viewer/internal/immutable/assets/pages/index.svelte-cd4c42c8.css" disabled media="(max-width: 0)">
+	<link rel="stylesheet" href="/fen-viewer/internal/immutable/assets/ChessBoard-bb2273bc.css" disabled media="(max-width: 0)">
+	<link rel="modulepreload" href="/fen-viewer/internal/immutable/start-3d4324d0.js">
+	<link rel="modulepreload" href="/fen-viewer/internal/immutable/chunks/index-b452b8f2.js">
+	<link rel="modulepreload" href="/fen-viewer/internal/immutable/chunks/singletons-d1fb5791.js">
+	<link rel="modulepreload" href="/fen-viewer/internal/immutable/layout.svelte-93b78849.js">
+	<link rel="modulepreload" href="/fen-viewer/internal/immutable/pages/index.svelte-be99f81a.js">
+	<link rel="modulepreload" href="/fen-viewer/internal/immutable/chunks/ChessBoard-57b76d56.js">
+  </head>
+  <body>
+    
+
+
+<main><h1>FEN-Viewer</h1>
+
+  <div class="inputContainer svelte-163oj43"><input pattern="^(([rnbqkpRNBQKP]|\d)+\/){7}([rnbqkpRNBQKP]|\d)+ [wb] (-|[kqKQ]{1,4}) (-|[a-h][1-8]) \d+ \d+$" type="text" spellcheck="false" name="fen" placeholder="FEN String" value="rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1" class="svelte-163oj43">
+  <div class="svelte-163oj43"></div>
+</div>
+
+  
+
+</main>
+
+
+		<script type="module" data-sveltekit-hydrate="1t6ory0">
+		import { start } from "/fen-viewer/internal/immutable/start-3d4324d0.js";
+		start({
+			target: document.querySelector('[data-sveltekit-hydrate="1t6ory0"]').parentNode,
+			paths: {"base":"/fen-viewer","assets":"/fen-viewer"},
+			session: {},
+			route: true,
+			spa: false,
+			trailing_slash: "always",
+			hydrate: {
+				status: 200,
+				error: null,
+				nodes: [0, 2],
+				params: {},
+				routeId: ""
+			}
+		});
+	</script>
+  </body>
+</html>
