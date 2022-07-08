@@ -20,9 +20,9 @@ export class ServerConnection {
 
   private playerName!: string
 
-  readonly session: Promise<PlayerInfo>
+  readonly session?: Promise<PlayerInfo>
 
-  constructor(readonly url = "wss://chess.df1ash.de/websockets/game", session: Partial<PlayerInfo>) {
+  constructor(readonly url = "wss://chess.df1ash.de/websockets/game", session?: Partial<PlayerInfo>) {
     this.websocket = new WebSocket(url)
     this.isUp = new Promise(resolve => {
       this.websocket.addEventListener("open", () => resolve())
@@ -38,23 +38,25 @@ export class ServerConnection {
       }
     })
 
-    this.session =
-      !session.playerName || !session.playerID
-        ? this.getState().then(() => {
-            return this.register({
-              username: session.playerName ?? randomString(20),
+    if (session) {
+      this.session =
+        !session.playerName || !session.playerID
+          ? this.getState().then(() => {
+              return this.register({
+                username: session.playerName ?? randomString(20),
+              })
             })
-          })
-        : Promise.resolve(session as LoginResponse)
+          : Promise.resolve(session as LoginResponse)
 
-    this.session.then(session => {
-      this.playerName = session.playerName
+      this.session.then(session => {
+        this.playerName = session.playerName
 
-      void this.login({
-        username: session.playerName,
-        playerID: session.playerID,
+        void this.login({
+          username: session.playerName,
+          playerID: session.playerID,
+        })
       })
-    })
+    }
   }
 
   private async request<G, T>(query: G): Promise<T> {
@@ -83,6 +85,10 @@ export class ServerConnection {
   }
 
   async join(info: Pick<JoinGameRequest, "gameID">): Promise<JoinGameResponse> {
+    if (!this.session) {
+      throw "Not logged in"
+    }
+
     return this.request<JoinGameRequest, JoinGameResponse>({
       type: RequestType.JOIN_GAME,
       username: (await this.session).playerName,
@@ -112,6 +118,10 @@ export class ServerConnection {
   }
 
   async createGame(): Promise<CreateGameResponse> {
+    if (!this.session) {
+      throw "Not logged in"
+    }
+
     return this.request<CreateGameRequest, CreateGameResponse>({
       type: RequestType.CREATE_GAME,
       username: (await this.session).playerName,
@@ -136,6 +146,10 @@ export class ServerConnection {
   }
 
   async makeMove(info: Pick<MoveRequest, "gameID" | "move">): Promise<MoveResponse> {
+    if (!this.session) {
+      throw "Not logged in"
+    }
+
     return this.request<MoveRequest, MoveResponse>({
       type: RequestType.MOVE,
       username: (await this.session).playerName,
