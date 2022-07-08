@@ -16,7 +16,7 @@
   $: games = parseGames(response)
 
   onMount(() => {
-    serverConnection = new ServerConnection("ws://localhost:8025", {
+    serverConnection = new ServerConnection(process.env.SERVER_URL || "ws://localhost:8025", {
       playerName: $page.url.searchParams.get("playerName"),
       playerID: Number($page.url.searchParams.get("playerID")),
     })
