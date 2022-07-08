@@ -22,7 +22,7 @@ export class ServerConnection {
 
   readonly session?: Promise<PlayerInfo>
 
-  constructor(readonly url = "wss://chess.df1ash.de/websockets/game", session?: Partial<PlayerInfo>) {
+  constructor(readonly url: string, session?: Partial<PlayerInfo>) {
     this.websocket = new WebSocket(url)
     this.isUp = new Promise(resolve => {
       this.websocket.addEventListener("open", () => resolve())
